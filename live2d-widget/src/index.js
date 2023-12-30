@@ -1,133 +1,178 @@
-// Created by xiazeyu.
+import Model from "./model.js";
+import showMessage from "./message.js";
+import randomSelection from "./utils.js";
+import tools from "./tools.js";
 
-////////////////////////////////////
-// Celebrate for the 3.0 version! //
-////////////////////////////////////
+function loadWidget(config) {
+    const model = new Model(config);
+    localStorage.removeItem("waifu-display");
+    sessionStorage.removeItem("waifu-text");
+    document.body.insertAdjacentHTML("beforeend", `<div id="waifu">
+            <div id="waifu-tips"></div>
+            <canvas id="live2d" width="800" height="800"></canvas>
+            <div id="waifu-tool"></div>
+        </div>`);
+    // https://stackoverflow.com/questions/24148403/trigger-css-transition-on-appended-element
+    setTimeout(() => {
+        document.getElementById("waifu").style.bottom = 0;
+    }, 0);
 
-/**
- * @description The entry point of live2d-widget.
- */
+    (function registerTools() {
+        tools["switch-model"].callback = () => model.loadOtherModel();
+        tools["switch-texture"].callback = () => model.loadRandModel();
+        if (!Array.isArray(config.tools)) {
+            config.tools = Object.keys(tools);
+        }
+        for (let tool of config.tools) {
+            if (tools[tool]) {
+                const { icon, callback } = tools[tool];
+                document.getElementById("waifu-tool").insertAdjacentHTML("beforeend", `<span id="waifu-tool-${tool}">${icon}</span>`);
+                document.getElementById(`waifu-tool-${tool}`).addEventListener("click", callback);
+            }
+        }
+    })();
 
+    function welcomeMessage(time) {
+        if (location.pathname === "/") { // 如果是主页
+            for (let { hour, text } of time) {
+                const now = new Date(),
+                    after = hour.split("-")[0],
+                    before = hour.split("-")[1] || after;
+                if (after <= now.getHours() && now.getHours() <= before) {
+                    return text;
+                }
+            }
+        }
+        const text = `欢迎阅读<span>「${document.title.split(" - ")[0]}」</span>`;
+        let from;
+        if (document.referrer !== "") {
+            const referrer = new URL(document.referrer),
+                domain = referrer.hostname.split(".")[1];
+            const domains = {
+                "baidu": "百度",
+                "so": "360搜索",
+                "google": "谷歌搜索"
+            };
+            if (location.hostname === referrer.hostname) return text;
 
-'use strict';
+            if (domain in domains) from = domains[domain];
+            else from = referrer.hostname;
+            return `Hello！来自 <span>${from}</span> 的朋友<br>${text}`;
+        }
+        return text;
+    }
 
-import device from 'current-device';
-import { config, configApplyer }from './config/configMgr';
+    function registerEventListener(result) {
+        // 检测用户活动状态，并在空闲时显示消息
+        let userAction = false,
+            userActionTimer,
+            messageArray = result.message.default,
+            lastHoverElement;
+        window.addEventListener("mousemove", () => userAction = true);
+        window.addEventListener("keydown", () => userAction = true);
+        setInterval(() => {
+            if (userAction) {
+                userAction = false;
+                clearInterval(userActionTimer);
+                userActionTimer = null;
+            } else if (!userActionTimer) {
+                userActionTimer = setInterval(() => {
+                    showMessage(messageArray, 6000, 9);
+                }, 20000);
+            }
+        }, 1000);
+        showMessage(welcomeMessage(result.time), 7000, 11);
+        window.addEventListener("mouseover", event => {
+            for (let { selector, text } of result.mouseover) {
+                if (!event.target.closest(selector)) continue;
+                if (lastHoverElement === selector) return;
+                lastHoverElement = selector;
+                text = randomSelection(text);
+                text = text.replace("{text}", event.target.innerText);
+                showMessage(text, 4000, 8);
+                return;
+            }
+        });
+        window.addEventListener("click", event => {
+            for (let { selector, text } of result.click) {
+                if (!event.target.closest(selector)) continue;
+                text = randomSelection(text);
+                text = text.replace("{text}", event.target.innerText);
+                showMessage(text, 4000, 8);
+                return;
+            }
+        });
+        result.seasons.forEach(({ date, text }) => {
+            const now = new Date(),
+                after = date.split("-")[0],
+                before = date.split("-")[1] || after;
+            if ((after.split("/")[0] <= now.getMonth() + 1 && now.getMonth() + 1 <= before.split("/")[0]) && (after.split("/")[1] <= now.getDate() && now.getDate() <= before.split("/")[1])) {
+                text = randomSelection(text);
+                text = text.replace("{year}", now.getFullYear());
+                messageArray.push(text);
+            }
+        });
 
-if (process.env.NODE_ENV === 'development'){
-  console.log('--- --- --- --- ---\nLive2Dwidget: Hey that, notice that you are now in DEV MODE.\n--- --- --- --- ---');
+        const devtools = () => { };
+        console.log("%c", devtools);
+        devtools.toString = () => {
+            showMessage(result.message.console, 6000, 9);
+        };
+        window.addEventListener("copy", () => {
+            showMessage(result.message.copy, 6000, 9);
+        });
+        window.addEventListener("visibilitychange", () => {
+            if (!document.hidden) showMessage(result.message.visibilitychange, 6000, 9);
+        });
+    }
+
+    (function initModel() {
+        let modelId = localStorage.getItem("modelId"),
+            modelTexturesId = localStorage.getItem("modelTexturesId");
+        if (modelId === null) {
+            // 首次访问加载 指定模型 的 指定材质
+            modelId = 1; // 模型 ID
+            modelTexturesId = 53; // 材质 ID
+        }
+        model.loadModel(modelId, modelTexturesId);
+        fetch(config.waifuPath)
+            .then(response => response.json())
+            .then(registerEventListener);
+    })();
 }
 
-let coreApp;
-/**
- * The main entry point, which is ... nothing
- */
-
-class L2Dwidget {
-
-  constructor() {
-    this.eventHandlers = {};
-    this.config = config;
-  }
-
-  on(name, handler) {
-    if (typeof handler !== 'function') {
-      throw new TypeError('Event handler is not a function.');
+function initWidget(config, apiPath) {
+    if (typeof config === "string") {
+        config = {
+            waifuPath: config,
+            apiPath
+        };
     }
-    if (!this.eventHandlers[name]) {
-      this.eventHandlers[name] = [];
-    }
-    this.eventHandlers[name].push(handler);
-    return this;
-  }
-
-  emit(name, ...args) {
-    if (!!this.eventHandlers[name]) {
-      this.eventHandlers[name].forEach(handler => {
-        if (typeof handler === 'function') {
-          handler(...args);
+    document.body.insertAdjacentHTML("beforeend", `<div id="waifu-toggle">
+            <span>看板娘</span>
+        </div>`);
+    const toggle = document.getElementById("waifu-toggle");
+    toggle.addEventListener("click", () => {
+        toggle.classList.remove("waifu-toggle-active");
+        if (toggle.getAttribute("first-time")) {
+            loadWidget(config);
+            toggle.removeAttribute("first-time");
+        } else {
+            localStorage.removeItem("waifu-display");
+            document.getElementById("waifu").style.display = "";
+            setTimeout(() => {
+                document.getElementById("waifu").style.bottom = 0;
+            }, 0);
         }
-      });
-    }
-    if (!!this.eventHandlers['*']) {
-      this.eventHandlers['*'].forEach(handler => {
-        if (typeof handler === 'function') {
-          handler(name, ...args);
-        }
-      });
-    }
-    return this;
-  }
-
-/**
- * The init function
- * @param {Object}   [userConfig] User's custom config 用户自定义设置
- * @param {String}   [userConfig.model.jsonPath = ''] Path to Live2D model's main json eg. `https://test.com/miku.model.json` model主文件路径
- * @param {Number}   [userConfig.model.scale = 1] Scale between the model and the canvas 模型与canvas的缩放
- * @param {Number}   [userConfig.display.superSample = 2] rate for super sampling rate 超采样等级
- * @param {Number}   [userConfig.display.width = 150] Width to the canvas which shows the model canvas的长度
- * @param {Number}   [userConfig.display.height = 300] Height to the canvas which shows the model canvas的高度
- * @param {String}   [userConfig.display.position = 'right'] Left of right side to show 显示位置：左或右
- * @param {Number}   [userConfig.display.hOffset = 0] Horizontal offset of the canvas canvas水平偏移
- * @param {Number}   [userConfig.display.vOffset = -20] Vertical offset of the canvas canvas垂直偏移
- * @param {Boolean}  [userConfig.mobile.show = true] Whether to show on mobile device 是否在移动设备上显示
- * @param {Number}   [userConfig.mobile.scale = 0.5] Scale on mobile device 移动设备上的缩放
- * @param {String}   [userConfig.name.canvas = 'live2dcanvas'] ID name of the canvas canvas元素的ID
- * @param {String}   [userConfig.name.div = 'live2d-widget'] ID name of the div div元素的ID
- * @param {Number}   [userConfig.react.opacity = 0.7] opacity 透明度
- * @param {Boolean}  [userConfig.dev.border = false] Whether to show border around the canvas 在canvas周围显示边界
- * @param {Boolean}  [userConfig.dialog.enable = false] Display dialog 显示人物对话框
- * @param {Boolean}  [userConfig.dialog.hitokoto = false] Enable hitokoto 使用一言API
- * @return {null}
- */
-
-  init(userConfig = {}){
-    configApplyer(userConfig);
-    this.emit('config', this.config);
-    if((!config.mobile.show)&&(device.mobile())){
-      return;
-    }
-    import(/* webpackMode: 'lazy' */ './cLive2DApp').then(f => {
-      coreApp = f;
-      coreApp.theRealInit(this);
-    }).catch(err => {
-      console.error(err);
     });
-  }
-
-
-/**
- * Capture current frame to png file {@link captureFrame}
- * @param  {Function} callback The callback function which will receive the current frame
- * @return {null}
- */
-
-  captureFrame(callback){
-    return coreApp.captureFrame(callback);
-  }
-
-/**
- * download current frame {@link L2Dwidget.captureFrame}
- * @return {null}
- */
-
-  downloadFrame(){
-    this.captureFrame(
-      function(e){
-        let link = document.createElement('a');
-        document.body.appendChild(link);
-        link.setAttribute('type', 'hidden');
-        link.href = e;
-        link.download = 'live2d.png';
-        link.click();
-      }
-    );
-  }
-
-};
-
-let _ = new L2Dwidget();
-
-export {
-  _ as L2Dwidget,
+    if (localStorage.getItem("waifu-display") && Date.now() - localStorage.getItem("waifu-display") <= 86400000) {
+        toggle.setAttribute("first-time", true);
+        setTimeout(() => {
+            toggle.classList.add("waifu-toggle-active");
+        }, 0);
+    } else {
+        loadWidget(config);
+    }
 }
+
+export default initWidget;
