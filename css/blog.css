@@ -1,0 +1,110 @@
+:root {
+    --editor-width: 1440px;
+    --background-color: rgba(255, 255, 255, 0.8);
+}
+
+.editor-parent {
+    position: relative;
+    flex: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(var(--editor-width) / 2);
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    pointer-events: none;
+}
+
+.editor-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 设置高度来撑开容器，使其垂直居中 */
+    width: var(--editor-width);
+}
+
+/*---------新建文章和文章修改--------------------------------------*/
+
+form {
+  text-align: left;
+  padding-left: 100px;
+  padding-right: 10px;
+}
+
+
+input {
+  height: 25px;
+  padding-left: 10px;
+  width: 50%;
+}
+
+button {
+  height: 35px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: steelblue;
+  color: whitesmoke;
+  border-radius: 5px;
+  width: 60px;
+}
+
+a {
+  color: #0d110f;
+}
+
+
+
+.article-main {
+    padding: 40px;
+    margin-left: 138px;
+    margin-bottom: 60px;
+    text-align: center;
+    font-size: large;
+}
+
+.article-element {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-radius: 8px;
+    background-color: var(--background-color);
+}
+
+.article-title {
+    flex: 1;
+    margin-bottom: 20px;
+    height: 52px;
+    width: 312px;
+}
+
+.title-input {
+    box-shadow: none;
+    height: 44px;
+}
+
+.article-avatar {
+    flex: 1;
+    margin-top: 20px;
+    margin-left: -130px;
+}
+
+.custom-form-item {
+    display: block;
+}
+
+.category-item {
+    flex: 1;
+    margin-left: -100px;
+    width: 312px;
+}
+
+.submit-button {
+    margin: 20px 0 0 0;
+}
