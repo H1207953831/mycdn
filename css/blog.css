@@ -1,6 +1,7 @@
 :root {
     --editor-width: 1440px;
     --background-color: rgba(255, 255, 255, 0.8);
+    --web-font-family: "微软雅黑","宋体", sans-serif;
 }
 
 .editor-parent {
@@ -33,34 +34,15 @@
 /*---------新建文章和文章修改--------------------------------------*/
 
 form {
-  text-align: left;
-  padding-left: 100px;
-  padding-right: 10px;
+    text-align: left;
+    padding-left: 100px;
+    padding-right: 10px;
 }
 
-
-input {
-  height: 25px;
-  padding-left: 10px;
-  width: 50%;
+.el-button {
+    width: 60px;
+    margin: 20px 0 0 0;
 }
-
-button {
-  height: 35px;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  background: steelblue;
-  color: whitesmoke;
-  border-radius: 5px;
-  width: 60px;
-}
-
-a {
-  color: #0d110f;
-}
-
-
 
 .article-main {
     padding: 40px;
@@ -99,12 +81,56 @@ a {
     display: block;
 }
 
-.category-item {
+.category-choice {
     flex: 1;
     margin-left: -100px;
     width: 312px;
 }
+.category-item,
+.article-item {
+  display: block; /* 让每个 div 元素独自占据一行 */
+  text-align: left; /* 文字左对齐 */
+  margin-left: 10px; /* 可选的，添加底部间距 */
+  margin-bottom: 10px;
+  font-size: small;
+  width: 90%;
+}
+.category-item:hover,
+.article-item:hover {
+  background-color: #f4f4f4; /* 将背景颜色改为灰色 */
+  color: #0684bd; /* 将文字颜色改为蓝色 */
+}
 
-.submit-button {
-    margin: 20px 0 0 0;
+.pendant {
+  display: inline-block;
+  padding: 10px;
+  width: 260px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(192, 192, 192, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
+  font-family: var(--web-font-family);
+  font-weight: bold;
+}
+
+.pendant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pendant-title {
+  display: block;
+  text-align: left;
+  font-size: 18px;
+  margin-left: 10px;
+  padding: 5px 0 10px 0;
+}
+
+.pendant-more {
+  display: block;
+}
+.pendant-more:hover {
+  color: #0684bd; /* 将文字颜色改为蓝色 */
+  cursor: pointer;
 }
