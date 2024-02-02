@@ -1,7 +1,26 @@
 :root {
     --editor-width: 1440px;
     --background-color: rgba(255, 255, 255, 0.8);
-    --web-font-family: "微软雅黑","宋体", sans-serif;
+    --web-font-family: "微软雅黑", "宋体", sans-serif;
+    --paragraph-color: #666666;
+}
+
+a {
+    text-decoration: none;
+    color: var(--paragraph-color);
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none;
+    outline: none;
+    color: inherit;
+}
+
+a i {
+    padding: 0 2px;
 }
 
 .editor-parent {
@@ -86,51 +105,54 @@ form {
     margin-left: -100px;
     width: 312px;
 }
+
 .category-item,
 .article-item {
-  display: block; /* 让每个 div 元素独自占据一行 */
-  text-align: left; /* 文字左对齐 */
-  margin-left: 10px; /* 可选的，添加底部间距 */
-  margin-bottom: 10px;
-  font-size: small;
-  width: 90%;
+    display: block; /* 让每个 div 元素独自占据一行 */
+    text-align: left; /* 文字左对齐 */
+    margin-left: 10px; /* 可选的，添加底部间距 */
+    margin-bottom: 10px;
+    font-size: small;
+    width: 90%;
 }
+
 .category-item:hover,
 .article-item:hover {
-  background-color: #f4f4f4; /* 将背景颜色改为灰色 */
-  color: #0684bd; /* 将文字颜色改为蓝色 */
+    background-color: #f4f4f4; /* 将背景颜色改为灰色 */
+    color: #0684bd; /* 将文字颜色改为蓝色 */
 }
 
 .pendant {
-  display: inline-block;
-  padding: 10px;
-  width: 260px;
-  height: auto;
-  border-radius: 8px;
-  border: 1px solid rgba(192, 192, 192, 0.5);
-  background-color: rgba(255, 255, 255, 0.8);
-  font-family: var(--web-font-family);
-  font-weight: bold;
+    display: inline-block;
+    padding: 10px;
+    width: 260px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(192, 192, 192, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
+    font-family: var(--web-font-family);
+    font-weight: bold;
 }
 
 .pendant-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .pendant-title {
-  display: block;
-  text-align: left;
-  font-size: 18px;
-  margin-left: 10px;
-  padding: 5px 0 10px 0;
+    display: block;
+    text-align: left;
+    font-size: 18px;
+    margin-left: 10px;
+    padding: 5px 0 10px 0;
 }
 
 .pendant-more {
-  display: block;
+    display: block;
 }
+
 .pendant-more:hover {
-  color: #0684bd; /* 将文字颜色改为蓝色 */
-  cursor: pointer;
+    color: #0684bd; /* 将文字颜色改为蓝色 */
+    cursor: pointer;
 }
