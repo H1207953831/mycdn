@@ -5,6 +5,64 @@
     --paragraph-color: #666666;
 }
 
+body {
+    margin: 0;
+    color: var(--paragraph-color);
+    overflow-x: hidden;
+    font-family: var(--body-font);
+    font-size: 16px;
+}
+
+h1 {
+    font-size: 48px;
+    line-height: 1.0833333333;
+}
+
+h2 {
+    font-size: 36px;
+    line-height: 1.4444444444;
+}
+
+h3 {
+    font-size: 24px;
+    line-height: 1.0833333333;
+}
+
+h4 {
+    font-size: 20px;
+    line-height: 1.2380952381;
+}
+
+h5 {
+    font-size: 16px;
+    line-height: 1.0833333333;
+}
+
+h6 {
+    font-size: 14px;
+    line-height: 1.0833333333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 1.5rem 0;
+}
+
+p {
+    color: var(--paragraph-color);
+    font-family: var(--body-font);
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    line-height: 1.6;
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
 a {
     text-decoration: none;
     color: var(--paragraph-color);
@@ -48,6 +106,7 @@ a i {
     justify-content: center;
     align-items: center; /* 设置高度来撑开容器，使其垂直居中 */
     width: var(--editor-width);
+    min-height: auto;
 }
 
 /*---------新建文章和文章修改--------------------------------------*/
@@ -155,4 +214,9 @@ form {
 .pendant-more:hover {
     color: #0684bd; /* 将文字颜色改为蓝色 */
     cursor: pointer;
+}
+.vditor-custom {
+    min-height: 720px;
+    width: 1440px;
+    min-width: 1440px;
 }
