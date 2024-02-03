@@ -300,3 +300,10 @@ span.bot {
     font-size: small;
     color: rgba(128, 128, 128, 1);
 }
+
+.article-title-new {
+    text-align: center;
+    padding-bottom: 1rem;
+    font-size: 36px;
+    line-height: 1.4444444444;
+}
