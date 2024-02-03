@@ -2,12 +2,12 @@
     --editor-width: 1440px;
     --background-color: rgba(255, 255, 255, 0.8);
     --web-font-family: "微软雅黑", "宋体", sans-serif;
-    --paragraph-color: #666666;
+    --custom-color: #24292e;
 }
 
 body {
     margin: 0;
-    color: var(--paragraph-color);
+    color: var(--custom-color);
     overflow-x: hidden;
     font-family: var(--body-font);
     font-size: 16px;
@@ -53,7 +53,7 @@ h6 {
 }
 
 p {
-    color: var(--paragraph-color);
+    color: var(--custom-color);
     font-family: var(--body-font);
     -webkit-hyphens: auto;
     -ms-hyphens: auto;
@@ -65,7 +65,7 @@ p {
 
 a {
     text-decoration: none;
-    color: var(--paragraph-color);
+    color: var(--custom-color);
 }
 
 a,
@@ -215,8 +215,88 @@ form {
     color: #0684bd; /* 将文字颜色改为蓝色 */
     cursor: pointer;
 }
+
 .vditor-custom {
     min-height: 720px;
     width: 1440px;
     min-width: 1440px;
+}
+
+/*-----------ArticleList-----------------------------*/
+.article-list-block {
+    width: 60%;
+    display: flex;
+    margin: 0 auto;
+}
+
+span.bot {
+    margin: 0 5px 0 5px;
+    color: rgba(128, 128, 128, 1);
+}
+
+.article-category-hover:hover {
+    color: black;
+}
+
+.article-list-main-container {
+    width: 100%;
+    padding: 20px; /* 添加内边距以增加内容与边框的间距 */
+    margin: 0 auto
+}
+
+.article-category {
+    font-size: small;
+    font-weight: bold;
+    color: rgba(128, 128, 128, 1);
+    letter-spacing: 1px; /* 字体间距 */
+}
+
+.main-container {
+    display: block;
+    width: 100%;
+    margin: 52px auto 0;
+    border: 1px solid rgba(192, 192, 192, 0.5);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 0 0 0;
+}
+
+.article-container {
+    padding: 1.5em 2em 1.5em 2em;
+}
+
+.article-title-new {
+    font-weight: bold;
+}
+
+.article-title-new:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+.buttom-bar {
+    padding: 0.5em 1em 0.5em 1em;
+}
+
+.buttom-attribute {
+    display: flex;
+    border-top: 1px solid rgba(192, 192, 192, 0.5);
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0 0 0;
+}
+
+.read-full-text {
+    margin-left: auto;
+    color: rgba(128, 128, 128, 1);
+}
+
+.read-full-text-hover:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.article-create {
+    font-size: small;
+    color: rgba(128, 128, 128, 1);
 }
