@@ -3,6 +3,7 @@
     --background-color: rgba(255, 255, 255, 0.8);
     --web-font-family: "微软雅黑", "宋体", sans-serif;
     --custom-color: #24292e;
+    --hover-color: #1a1a1a;
 }
 
 body {
@@ -64,8 +65,8 @@ p {
 }
 
 a {
-    text-decoration: none;
-    color: var(--custom-color);
+    text-decoration: none ;
+    color: var(--custom-color) ;
 }
 
 a,
@@ -103,18 +104,20 @@ a i {
 
 .editor-container {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center; /* 设置高度来撑开容器，使其垂直居中 */
-    width: var(--editor-width);
     min-height: auto;
+}
+.editor-container #vditor{
+    width: 100% !important;
 }
 
 /*---------新建文章和文章修改--------------------------------------*/
 
 form {
     text-align: left;
-    padding-left: 100px;
-    padding-right: 10px;
+    padding-left: 5vw;
+    padding-right: 5vw;
 }
 
 .el-button {
@@ -123,9 +126,8 @@ form {
 }
 
 .article-main {
-    padding: 40px;
-    margin-left: 138px;
-    margin-bottom: 60px;
+    width: 80%;
+    margin: 60px auto 60px;
     text-align: center;
     font-size: large;
 }
@@ -216,10 +218,10 @@ form {
     cursor: pointer;
 }
 
-.vditor-custom {
+.vditor-custom {;
     min-height: 720px;
-    width: 1440px;
-    min-width: 1440px;
+    width: 100%;
+    max-width: 1440px;
 }
 
 /*-----------ArticleList-----------------------------*/
@@ -266,17 +268,12 @@ span.bot {
 }
 
 .article-title-new {
-    text-align: center;
-    padding-bottom: 1rem;
-    font-size: 36px;
-    line-height: 1.4444444444;
     font-weight: bold;
 }
 
 .article-title-new:hover {
     color: gray;
     cursor: pointer;
-
 }
 
 .buttom-bar {
@@ -305,3 +302,13 @@ span.bot {
     font-size: small;
     color: rgba(128, 128, 128, 1);
 }
+
+.article-title-new {
+    text-align: center;
+    padding-bottom: 1rem;
+    font-size: 36px;
+    line-height: 1.4444444444;
+}
+
+/*-------------加载动画---------------*/
+
